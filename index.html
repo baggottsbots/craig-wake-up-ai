@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  
+
+<!-- SEO Meta Tags -->
+<title>Wake Up and Smell the AI 🤖 | Funny Landing Page for Craig</title>
+<meta name="description" content="A playful, slightly edgy landing page designed to convince Craig to embrace AI tools now with bold CTA, humorous sections, fake testimonials, and modern SaaS styling." />
+<meta property="og:title" content="Wake Up and Smell the AI 🤖 | Funny Landing Page for Craig" />
+<meta property="og:description" content="A playful, slightly edgy landing page designed to convince Craig to embrace AI tools now with bold CTA, humorous sections, fake testimonials, and modern SaaS styling." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Wake Up and Smell the AI 🤖 | Funny Landing Page for Craig" />
+<meta name="twitter:description" content="A playful, slightly edgy landing page designed to convince Craig to embrace AI tools now with bold CTA, humorous sections, fake testimonials, and modern SaaS styling." />
+<!-- End SEO Meta Tags -->
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=2491');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='yKuRpFW';
+  var apiBase='https://paymegpt.com';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Thank you for purchasing '+pName.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'.</p><button onclick="document.getElementById(\'payment-success-overlay\').remove();window.history.replaceState({},\'\',window.location.pathname);" style="padding:12px 32px;font-size:16px;font-weight:600;background:#16a34a;color:white;border:none;border-radius:8px;cursor:pointer;">Continue</button></div>';
+      document.body.appendChild(overlay);
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-950 text-white antialiased selection:bg-fuchsia-500 selection:text-white">
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-24 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-fuchsia-600/25 blur-3xl"></div>
+    <div class="absolute top-40 -left-20 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-indigo-500/20 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,.07),_transparent_30%),linear-gradient(to_bottom,_rgba(15,23,42,.95),_rgba(2,6,23,1))]"></div>
+  </div>
+
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3">
+        <div class="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 text-xl shadow-glow">🤖</div>
+        <div>
+          <p class="text-sm font-semibold tracking-[0.25em] text-cyan-300 uppercase">Wake Up and Smell the AI</p>
+          <p class="text-xs text-slate-400">For Craig, specifically</p>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm text-slate-300">
+        <a href="#land" class="hover:text-white">AI Land</a>
+        <a href="#strategy" class="hover:text-white">Craig’s Strategy</a>
+        <a href="#benefits" class="hover:text-white">Today’s Wins</a>
+        <a href="#testimonials" class="hover:text-white">Receipts</a>
+        <a href="#cta" class="rounded-full bg-white/10 px-4 py-2 font-medium text-white hover:bg-white/15">Plug In Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="relative overflow-hidden">
+      <div class="mx-auto grid max-w-7xl gap-12 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-2 lg:items-start lg:px-8 lg:pb-28 lg:pt-24">
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-4 py-2 text-sm text-fuchsia-200">
+            <span class="h-2 w-2 rounded-full bg-fuchsia-400 animate-pulse"></span>
+            Hot take: the robots are not waiting for Craig
+          </div>
+          <h1 class="mt-6 text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl">
+            Craig… the robots already started without you
+          </h1>
+          <p class="mt-6 max-w-xl text-lg leading-8 text-slate-300 sm:text-xl">
+            While you’re “thinking about it,” AI is writing, summarizing, coding, designing, scheduling, and probably doing your competitor’s taxes. 
+          </p>
+
+          <!-- HERO VIDEO EMBED -->
+          <div class="mt-8 space-y-3">
+            <p class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+              <span class="animate-bounce-subtle inline-block">👇</span> Craig… press play. This matters 🤖
+            </p>
+            <div class="video-container relative group aspect-video w-full max-w-2xl overflow-hidden rounded-3xl border border-white/20 bg-black shadow-glow">
+              <video 
+                class="h-full w-full object-cover cursor-pointer" 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                preload="metadata"
+                poster="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000"
+                onclick="this.paused ? this.play() : this.pause()"
+              >
+                <source src="https://player.vimeo.com/external/494252666.sd.mp4?s=7269784e609341852026850d99216ec7c8c87932&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <!-- Manual Play Overlay -->
+              <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition group-hover:opacity-100">
+                <div class="h-20 w-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-2xl">
+                  <div class="h-0 w-0 border-y-[12px] border-y-transparent border-l-[20px] border-l-white ml-1"></div>
+                </div>
+              </div>
+              <div class="absolute bottom-4 right-4 pointer-events-none rounded-full bg-black/50 px-3 py-1 text-[10px] font-bold tracking-widest text-white backdrop-blur-md">
+                TAP TO PLAY
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <a href="#cta" class="inline-flex min-h-[64px] items-center justify-center rounded-2xl bg-gradient-to-r from-fuchsia-500 to-cyan-400 px-7 py-4 text-lg font-bold text-slate-950 shadow-glow transition active:scale-95 sm:text-base md:hover:scale-[1.03]">
+              Plug In Now 🚀
+            </a>
+            <a href="#land" class="inline-flex min-h-[64px] items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-7 py-4 text-lg font-semibold text-white transition active:bg-white/20 sm:text-base md:hover:bg-white/10">
+              See What You’re Missing
+            </a>
+          </div>
+          <div class="mt-8 flex flex-wrap items-center gap-3 text-sm text-slate-400">
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">No robots were harmed</span>
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">Yes, this is slightly roasting you</span>
+          </div>
+        </div>
+
+        <div class="relative lg:sticky lg:top-32">
+          <div class="absolute -inset-4 rounded-[2rem] bg-gradient-to-r from-fuchsia-500/20 to-cyan-400/20 blur-2xl"></div>
+          <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-glow backdrop-blur">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <p class="text-sm font-semibold text-white">AI Command Center</p>
+                <p class="text-xs text-slate-400">Status: way ahead of Craig</p>
+              </div>
+              <div class="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-300">LIVE</div>
+            </div>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2">
+              <div class="rounded-2xl bg-white/5 p-4">
+                <p class="text-xs text-slate-400">Emails drafted</p>
+                <p class="mt-2 text-3xl font-black">247</p>
+                <p class="mt-1 text-sm text-cyan-300">Better than human-first drafts</p>
+              </div>
+              <div class="rounded-2xl bg-white/5 p-4">
+                <p class="text-xs text-slate-400">Meetings avoided</p>
+                <p class="mt-2 text-3xl font-black">19</p>
+                <p class="mt-1 text-sm text-fuchsia-300">A public service</p>
+              </div>
+              <div class="rounded-2xl bg-white/5 p-4">
+                <p class="text-xs text-slate-400">Hours saved</p>
+                <p class="mt-2 text-3xl font-black">38.5</p>
+                <p class="mt-1 text-sm text-emerald-300">Fix the Jeep time</p>
+              </div>
+              <div class="rounded-2xl bg-white/5 p-4">
+                <p class="text-xs text-slate-400">Craig’s excuses</p>
+                <p class="mt-2 text-3xl font-black">3</p>
+                <p class="mt-1 text-sm text-amber-300">One of them is “later”</p>
+              </div>
+            </div>
+            <div class="mt-5 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4">
+              <p class="text-sm font-semibold text-cyan-200">PMG Demo Chat Widget + Claude</p>
+              <p class="mt-2 text-sm text-slate-300">
+                Ask the PMG demo widget anything, then connect Claude to make it sound like a team of geniuses.
+              </p>
+            </div>
+            <div class="mt-5 flex items-center justify-between text-xs text-slate-400">
+              <span>Craig detected: 99% resistant</span>
+              <span>Conversion: inevitable</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="land" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold tracking-[0.3em] text-cyan-300 uppercase">Meanwhile in AI Land...</p>
+          <h2 class="mt-3 text-3xl font-black sm:text-4xl">Exhibit A: the future is doing laps around your hesitation</h2>
+        </div>
+        <a href="#cta" class="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition active:bg-white/20 md:hover:bg-white/10">Join the Robots</a>
+      </div>
+      <div class="grid gap-5 md:grid-cols-3">
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 transition md:hover:-translate-y-1 md:hover:bg-white/7">
+          <div class="text-3xl">📝</div>
+          <h3 class="mt-4 text-xl font-bold">Write stuff while you sip coffee</h3>
+          <p class="mt-2 text-slate-300">Emails, proposals, and the occasional “sorry for the delay” with suspiciously good grammar.</p>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 transition md:hover:-translate-y-1 md:hover:bg-white/7">
+          <div class="text-3xl">⚙️</div>
+          <h3 class="mt-4 text-xl font-bold">Automate the boring parts</h3>
+          <p class="mt-2 text-slate-300">Turn repetitive tasks into background noise. Let AI do the grunt work while you pretend this was the plan.</p>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 transition md:hover:-translate-y-1 md:hover:bg-white/7">
+          <div class="text-3xl">🔍</div>
+          <h3 class="mt-4 text-xl font-bold">Find answers instantly</h3>
+          <p class="mt-2 text-slate-300">Research, summaries, and instant second opinions. Less Googling. More doing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MIDWAY VIDEO SECTION -->
+    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-[2.5rem] bg-white/5 border border-white/10 p-6 md:p-12">
+        <div class="flex flex-col lg:flex-row items-center gap-10">
+          <div class="w-full lg:w-1/2 space-y-6">
+            <p class="text-sm font-bold tracking-[0.3em] text-fuchsia-400 uppercase">A Message from the Future</p>
+            <h2 class="text-3xl font-black sm:text-5xl leading-tight">Craig… this is your sign 🤖</h2>
+            <p class="text-lg text-slate-300">
+              Stop scrolls. This isn't just a meme. It's a visual representation of how much smoother things go when you stop fighting the inevitable and start clicking the buttons.
+            </p>
+            <div class="flex pt-2">
+               <a href="#cta" class="inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-white px-8 py-3 text-lg font-bold text-slate-950 transition active:scale-95 md:hover:scale-[1.03]">
+                Accept Your Destiny
+              </a>
+            </div>
+          </div>
+          <div class="w-full lg:w-1/2">
+            <div class="space-y-3">
+              <p class="text-sm font-bold text-fuchsia-400 flex items-center gap-2">
+                <span class="animate-bounce-subtle inline-block">🎥</span> Craig… press play. This matters 🤖
+              </p>
+              <div class="video-container relative group aspect-video w-full overflow-hidden rounded-3xl border border-white/20 bg-black shadow-glow">
+                <video 
+                  class="h-full w-full object-cover cursor-pointer" 
+                  autoplay 
+                  muted 
+                  loop 
+                  playsinline 
+                  preload="metadata"
+                  onclick="this.paused ? this.play() : this.pause()"
+                >
+                  <source src="https://player.vimeo.com/external/494252666.sd.mp4?s=7269784e609341852026850d99216ec7c8c87932&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <!-- Manual Play Overlay -->
+                <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition group-hover:opacity-100">
+                  <div class="h-16 w-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-2xl">
+                    <div class="h-0 w-0 border-y-[10px] border-y-transparent border-l-[18px] border-l-white ml-1"></div>
+                  </div>
+                </div>
+                <div class="absolute bottom-4 right-4 pointer-events-none rounded-full bg-black/50 px-3 py-1 text-[10px] font-bold tracking-widest text-white backdrop-blur-md uppercase">
+                  Auto-Play Muted
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="strategy" class="border-y border-white/10 bg-white/[0.03]">
+      <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div>
+            <p class="text-sm font-bold tracking-[0.3em] text-fuchsia-300 uppercase">Craig’s Current Strategy</p>
+            <h2 class="mt-3 text-3xl font-black sm:text-4xl">A documentary about “I’ll look at it later”</h2>
+            <p class="mt-5 max-w-xl text-slate-300">
+              Scene 1: Craig bookmarks the AI tool. Scene 2: Craig says “interesting.” Scene 3: Craig gets busy with other things.
+              Scene 4: everyone else uses AI and leaves Craig in the dust.
+            </p>
+          </div>
+          <div class="grid gap-4">
+            <div class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold">09:00 AM</p><span class="text-amber-300">⏳</span>
+              </div>
+              <p class="mt-2 text-slate-300">Craig opens a tab titled “AI later.”</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold">11:30 AM</p><span class="text-rose-300">🫠</span>
+              </div>
+              <p class="mt-2 text-slate-300">Craig says he’s “waiting for a perfect moment.” The perfect moment is now, Craig.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold">3:00 PM</p><span class="text-emerald-300">✅</span>
+              </div>
+              <p class="mt-2 text-slate-300">Everyone else has built a faster workflow and gone home early.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="benefits" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <p class="text-sm font-bold tracking-[0.3em] text-cyan-300 uppercase">What Happens If You Log In Today</p>
+        <h2 class="mt-3 text-3xl font-black sm:text-4xl">Spoiler: your life gets less annoying</h2>
+      </div>
+      <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-3xl bg-gradient-to-br from-cyan-500/10 to-white/5 p-6 border border-white/10">
+          <div class="text-3xl">⚡</div>
+          <h3 class="mt-4 text-lg font-bold">Instant momentum</h3>
+          <p class="mt-2 text-sm text-slate-300">Start with one task. Accidentally improve your entire workflow.</p>
+        </div>
+        <div class="rounded-3xl bg-gradient-to-br from-fuchsia-500/10 to-white/5 p-6 border border-white/10">
+          <div class="text-3xl">🧠</div>
+          <h3 class="mt-4 text-lg font-bold">Less brain spam</h3>
+          <p class="mt-2 text-sm text-slate-300">Outsource the mental clutter and save your good thoughts for things that matter.</p>
+        </div>
+        <div class="rounded-3xl bg-gradient-to-br from-emerald-500/10 to-white/5 p-6 border border-white/10">
+          <div class="text-3xl">📬</div>
+          <h3 class="mt-4 text-lg font-bold">Cleaner communication</h3>
+          <p class="mt-2 text-sm text-slate-300">Say the thing faster, clearer, and with fewer apologies. The inbox will fear you.</p>
+        </div>
+        <div class="rounded-3xl bg-gradient-to-br from-amber-500/10 to-white/5 p-6 border border-white/10">
+          <div class="text-3xl">🏁</div>
+          <h3 class="mt-4 text-lg font-bold">Stop falling behind</h3>
+          <p class="mt-2 text-sm text-slate-300">Not because the world slowed down. Because you finally pressed the shiny button.</p>
+        </div>
+      </div>
+
+      <div class="mt-8 rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-glow">
+        <div class="grid gap-6 md:grid-cols-3">
+          <div class="md:col-span-2">
+            <p class="text-sm font-semibold text-cyan-200">💬 Demo Chat Widget Callout</p>
+            <h3 class="mt-2 text-2xl font-black">PMG connected with Claude: the “make it smarter” starter pack</h3>
+            <p class="mt-3 text-slate-300">
+              Try a live demo chat, connect your workflow, and let Claude handle the heavy lifting while PMG keeps it from turning into a beautiful mess.
+            </p>
+          </div>
+          <div class="flex items-center md:justify-end">
+            <a href="#cta" class="inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-white px-6 py-4 font-bold text-slate-950 transition active:scale-95 md:hover:scale-[1.03]">
+              Open Demo Chat 💬
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="border-y border-white/10 bg-white/[0.03]">
+      <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <p class="text-sm font-bold tracking-[0.3em] text-fuchsia-300 uppercase">Testimonials</p>
+          <h2 class="mt-3 text-3xl font-black sm:text-4xl">Absolutely real-ish praise from humans</h2>
+        </div>
+        <div class="mt-10 grid gap-5 lg:grid-cols-3">
+          <figure class="rounded-3xl border border-white/10 bg-slate-900/70 p-6">
+            <blockquote class="text-slate-300">“I thought AI was overhyped. Then I watched Craig use it for 10 minutes and immediately became a convert out of fear.”</blockquote>
+            <figcaption class="mt-4 text-sm font-semibold text-white">— Dana, productivity witness</figcaption>
+          </figure>
+          <figure class="rounded-3xl border border-white/10 bg-slate-900/70 p-6">
+            <blockquote class="text-slate-300">“Craig said he’d adopt AI ‘soon.’ That was 14 excuses ago. This page helped him become 7% less stubborn.”</blockquote>
+            <figcaption class="mt-4 text-sm font-semibold text-white">— Marcus, friend with a clipboard</figcaption>
+          </figure>
+          <figure class="rounded-3xl border border-white/10 bg-slate-900/70 p-6">
+            <blockquote class="text-slate-300">“The Claude + PMG demo made our workflow feel like it finally got a personality and a backbone.”</blockquote>
+            <figcaption class="mt-4 text-sm font-semibold text-white">— Priya, chief of not doing things manually</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-fuchsia-600 via-indigo-600 to-cyan-500 p-8 shadow-glow md:p-12">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,.25),_transparent_35%)]"></div>
+        <div class="relative grid gap-8 lg:grid-cols-2 lg:items-center">
+          <div>
+            <p class="text-sm font-bold tracking-[0.3em] text-white/80 uppercase">Final Call</p>
+            <h2 class="mt-3 text-4xl font-black sm:text-5xl">Don’t make Future Craig roast you.</h2>
+            <p class="mt-4 max-w-xl text-white/85 text-lg">
+              Log in, connect the tools, try the demo, and stop pretending this is a “someday” problem. 
+            </p>
+          </div>
+          <div class="flex flex-col gap-4">
+            <a href="#top" class="inline-flex min-h-[64px] items-center justify-center rounded-2xl bg-slate-950 px-8 py-4 text-xl font-black text-white transition active:scale-95 md:hover:scale-[1.03]">
+              Plug In Now ⚡
+            </a>
+            <p class="text-sm text-white/80 text-center lg:text-left">The robots already started. Be rude not to catch up.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10">
+    <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-12 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div>
+        <p class="font-semibold text-lg">Wake Up and Smell the AI 🤖</p>
+        <p class="text-sm text-slate-400">Built for Craig. Ideally before he invents another excuse.</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+        <a href="#land" class="hover:text-white transition-colors">AI Land</a>
+        <a href="#strategy" class="hover:text-white transition-colors">Strategy</a>
+        <a href="#benefits" class="hover:text-white transition-colors">Benefits</a>
+        <a href="#cta" class="font-bold text-cyan-400 hover:text-cyan-300">Plug In Now</a>
+      </div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html></html>
